@@ -1,5 +1,30 @@
+#include"mk_ether.h"
+//#include	<sys/ioctl.h>
+#include<sys/types.h>
+#include<string.h>
+#include"knet/ethernet.h"
+//#include <stdint.h>
+extern void mk_ether(struct ether_hdr *hdr, u_int8_t *d_addr, u_int8_t *s_addr){
+	//struct ifreq	ifreq;
+	//struct sockaddr_ll	sa;
+	//memset(&ifreq,0,sizeof(struct ifreq));
+	//strncpy(ifreq.ifr_name,device,sizeof(ifreq.ifr_name)-1);
+	//if(ioctl(soc,SIOCGIFINDEX,&ifreq)<0){
+	//	perror("ioctl");
+	//	close(soc);
+	//	return(-1);
+	//}
+	//sa.sll_family=PF_PACKET;
+
+	//hdr->ether_dest_addr = d_addr;
+	//hdr->ether_src_addr = s_addr;
+
+	strncpy(hdr->ether_dest_addr, 6, d_addr);
+	strncpy(hdr->ether_src_addr, 6, s_addr);
+	hdr->type = 0x0800;
+}
+/*
 #include	<unistd.h>
-#include	<sys/ioctl.h>
 #include	<arpa/inet.h>
 #include	<sys/socket.h>
 #include	<linux/if.h>
@@ -9,12 +34,9 @@
 #include	<netinet/ip.h>
 
 #include"initrawsock.h"
-#include"mk_ether.h"
 
 int initrawsock(char *device,int promiscFlag,int ipOnly)
 {
-struct ifreq	ifreq;
-struct sockaddr_ll	sa;
 int	soc;
 
 	if(ipOnly){
@@ -30,14 +52,6 @@ int	soc;
 		}
 	}
 
-	memset(&ifreq,0,sizeof(struct ifreq));
-	strncpy(ifreq.ifr_name,device,sizeof(ifreq.ifr_name)-1);
-	if(ioctl(soc,SIOCGIFINDEX,&ifreq)<0){
-		perror("ioctl");
-		close(soc);
-		return(-1);
-	}
-	sa.sll_family=PF_PACKET;
 	if(ipOnly){
 		sa.sll_protocol=htons(ETH_P_IP);
 	}
@@ -66,4 +80,4 @@ int	soc;
 	}
 
 	return(soc);
-}
+}*/
