@@ -46,6 +46,16 @@ u_int16_t icmp_packet[50] = {
 	0x0000
 };
 
+u_char packet[50] = {
+	0x00, 0x36, 0x9f, 0x3e, 0xa0, 0x8a, 0xa0, 0x36,
+	0x9f, 0x3f, 0x62, 0x02, 0x08, 0x00, 0x45, 0x00,
+	0x00, 0x54, 0x67, 0x0b, 0x40, 0x00, 0x40, 0x01,
+	0xbf, 0x91, 0x0a, 0x00, 0x00, 0x07, 0x0a, 0x00,
+	0x00, 0x06, 0x08, 0x00, 0x36, 0x87, 0x7c, 0xa3,
+	0x00, 0x01, 0x31, 0xd1, 0xdd, 0x5a, 0x00, 0x00,
+	0x00, 0x00
+};
+
 
 u_int16_t arp_packet[100] = {
 	0xffff, 0xffff, 0xffff, 0xdeb4,
@@ -54,25 +64,25 @@ u_int16_t arp_packet[100] = {
 
 
 int main(int argc, char **argv){
-	int sock, size, sock_eth3, sock_eth2;
+	int sock, size;//, sock_eth3, sock_eth2;
 	u_char buf[2048];
 
-	//if (argc < 2){ 
-  //  fprintf(stderr, "usage: ./main [dev-name]\n");
-  //  exit(1);
-  //}
+	if (argc < 2){ 
+    fprintf(stderr, "usage: ./main [dev-name]\n");
+    exit(1);
+  }
 
-  //if ((sock = initrawsock(argv[1], 1, 0)) < 0){ 
-  if ((sock_eth3 = initrawsock("eth3", 1, 0)) < 0){ 
-    //fprintf(stderr, "InitRawSocket:error:%s\n", argv[1]);
-    fprintf(stderr, "InitRawSocket:error:eth3\n");
+  if ((sock = initrawsock(argv[1], 1, 0)) < 0){ 
+  //if ((sock_eth3 = initrawsock("eth3", 1, 0)) < 0){ 
+    fprintf(stderr, "InitRawSocket:error:%s\n", argv[1]);
+    //fprintf(stderr, "InitRawSocket:error:eth3\n");
     exit(1);
   }
-  if ((sock_eth2 = initrawsock("eth2", 1, 0)) < 0){ 
-    //fprintf(stderr, "InitRawSocket:error:%s\n", argv[1]);
-    fprintf(stderr, "InitRawSocket:error:eth3\n");
-    exit(1);
-  }
+ // if ((sock_eth2 = initrawsock("eth2", 1, 0)) < 0){ 
+ //   //fprintf(stderr, "InitRawSocket:error:%s\n", argv[1]);
+ //   fprintf(stderr, "InitRawSocket:error:eth3\n");
+ //   exit(1);
+ // }
 
 	//struct ip_packet packet;
 	//write(sock, icmp_packet, strlen(icmp_packet));
@@ -83,21 +93,21 @@ int main(int argc, char **argv){
 	//to.sin_port = ;
 
 
-	if (((size = read(sock_eth3, buf, sizeof(buf))) <= 0)){
-		fprintf(stderr, "readerr\n");
-		exit(1);
-	}
-	printf("read success\n");
+//	if (((size = read(sock_eth3, buf, sizeof(buf))) <= 0)){
+//		fprintf(stderr, "readerr\n");
+//		exit(1);
+//	}
+//	printf("read success\n");
 
 	int n;
 #if 1
-	//if ((n = write(sock, icmp_packet, strlen(icmp_packet))) <= 0){
-	if ((n = write(sock_eth2, buf, size)) <= 0){
+	if ((n = write(sock, packet, strlen(packet))) <= 0){
+	//if ((n = write(sock_eth2, buf, size)) <= 0){
 		fprintf(stdout, "can not send packet\n");
 		exit(1);
 	}
 	//fflush(sock_eth2);
-	printf("write success\n");
+	printf("write fin\n");
 
 #else
 	if ((n = sendto(sock, (char *)icmp_packet, strlen(icmp_packet), 0, (struct sockaddr *)&to, sizeof(to))) <= 0){
@@ -106,6 +116,6 @@ int main(int argc, char **argv){
 	}
 #endif
 	
-	close(sock_eth2);
-	close(sock_eth3);
+	close(sock);
+	//close(sock_eth3);
 }
