@@ -18,10 +18,15 @@ extern void mk_ether(struct ether_hdr *hdr, u_int8_t *d_addr, u_int8_t *s_addr){
 
 	//hdr->ether_dest_addr = d_addr;
 	//hdr->ether_src_addr = s_addr;
+	printf("mk_ether head \n");
 
-	strncpy(hdr->ether_dest_addr, 6, d_addr);
-	strncpy(hdr->ether_src_addr, 6, s_addr);
+	strncpy(hdr->ether_dest_addr, d_addr, 6);
+	strncpy(hdr->ether_src_addr, s_addr, 6);
+	//hdr->ether_dest_addr
+	printf("strncpy fin\n");
 	hdr->type = 0x0800;
+
+	printf("mk_ether fin\n");
 }
 /*
 #include	<unistd.h>

@@ -116,8 +116,21 @@ int main(int argc, char **argv){
 //	printf("read success\n");
 
 
-	//struct ether_hdr *eth_hdr;
-	//mk_ether(eth_hdr, d_addr, s_addr);
+	struct ether_hdr ethhdr;
+	mk_ether(&ethhdr, d_addr, s_addr);
+
+	struct ip_hdr iphdr;
+	iphdr.version = 0x4;
+	iphdr.hdr_len = 0x5;
+	iphdr.type_of_service = 0x00;
+	iphdr.total_len = htons(0x003c);
+	iphdr.id = ;
+	iphdr.frag;
+	iphdr.ttl = ;
+	iphdr.proto = ;
+	iphdr.check = ;
+	iphdr.src_addr = ;
+	iphdr.dest_addr = ;
 
 
 	int n;
