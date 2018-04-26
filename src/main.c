@@ -70,6 +70,11 @@ u_char packet[64] = {
 //	0x6b16, 0x904c, 0x0806, 
 //};
 
+struct test_packet {
+	struct ether_hdr ethhdr;
+	struct ip_hdr iphdr;
+	u_char pate[26];
+};
 
 int main(int argc, char **argv){
 	int sock, size;//, sock_eth3, sock_eth2;
@@ -115,34 +120,50 @@ int main(int argc, char **argv){
 //	}
 //	printf("read success\n");
 
+	struct test_packet *p;
+	p = (struct test_packet *)malloc(sizeof(struct test_packet));
 
-	struct ether_hdr ethhdr;
-	mk_ether(&ethhdr, d_addr, s_addr);
+	//struct ether_hdr ethhdr;
+	mk_ether(&(p->ethhdr), d_addr, s_addr);
 
-	struct ip_hdr iphdr;
-	iphdr.version = 0x4;
-	iphdr.hdr_len = 0x5;
-	iphdr.type_of_service = 0x00;
-	iphdr.total_len = htons(0x003c);
-	iphdr.id = ;
-	iphdr.frag;
-	iphdr.ttl = ;
-	iphdr.proto = ;
-	iphdr.check = ;
-	iphdr.src_addr = ;
-	iphdr.dest_addr = ;
+	//struct ip_hdr iphdr;
+	p->iphdr.version = 0x4;
+	p->iphdr.hdr_len = 0x5;
+	p->iphdr.type_of_service = 0x00;
+	p->iphdr.total_len = htons(0x003c);
+	p->iphdr.id = htons(0x209a);
+	p->iphdr.frag = htons(0x4000);
+	p->iphdr.ttl = 0x40;
+	p->iphdr.proto = 0x01;
+	p->iphdr.check = htons(0x0000);
+	p->iphdr.src_addr = htonl(0x0a000003);
+	p->iphdr.dest_addr = htonl(0x0a000005);
+
+	int l;
+	for (l = 0; l < 26; l++){
+		p->pate[l] = 0x00;
+	}
+
+	//p.ethhdr = &ethhdr;
+	//p.iphdr = &iphdr;
 
 
 	int n;
 #if 1
 	printf("write\n");
-	if ((n = write(sock, packet, 64)) <= 0){
+	if ((n = write(sock, (u_char *)&p, 60)) <= 0){
 	//if ((n = write(sock_eth2, buf, size)) <= 0){
 		fprintf(stdout, "can not send packet\n");
 		exit(1);
 	}
 	//fflush(sock_eth2);
 	printf("write fin\n");
+
+	FILE *fp;
+	fp = fopen("aaa", "wb");
+	fwrite(p, sizeof(struct test_packet), 1, fp);
+	fflush(fp);
+	close(fp);
 
 #else
 	if ((n = sendto(sock, (char *)icmp_packet, strlen(icmp_packet), 0, (struct sockaddr *)&to, sizeof(to))) <= 0){

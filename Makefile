@@ -5,7 +5,7 @@ vpath %.h include
 OBJS=main.o initrawsock.o mk_ether.o
 SRCS=$(OBJS:%.o=%.c)
 CFLAGS=-g -Wall -I include
-LDLIBS=-lpcap
+LDLIBS=
 TARGET=main
 $(TARGET):$(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET) $(OBJS) $(LDLIBS)
