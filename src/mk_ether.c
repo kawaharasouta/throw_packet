@@ -24,7 +24,9 @@ extern void mk_ether(struct ether_hdr *hdr, u_int8_t *d_addr, u_int8_t *s_addr){
 	strncpy(hdr->ether_src_addr, s_addr, 6);
 	//hdr->ether_dest_addr
 	printf("strncpy fin\n");
-	hdr->type = 0x0800;
+	hdr->type = ntohs(0x0800);
+	//hdr->type1 = 0x08;
+	//hdr->type2 = 0x00;
 
 	printf("mk_ether fin\n");
 }

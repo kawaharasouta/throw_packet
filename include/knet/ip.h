@@ -3,11 +3,15 @@
 
 struct ip_hdr{
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-	unsigned int hdr_len:4;
-	unsigned int version:4;
+	//unsigned int hdr_len:4;
+	//unsigned int version:4;
+	u_int8_t hdr_len:4;
+	u_int8_t version:4;
 #elif __BYTE_ORDER == __BIG_ENDIAN
-	unsigned int version:4;
-	unsigned int hdr_len:4;
+	//unsigned int version:4;
+	//unsigned int hdr_len:4;
+	u_int8_t version:4;
+	u_int8_t hdr_len:4;
 #else
 # error "Please fix <bits/endian.h>"
 #endif
